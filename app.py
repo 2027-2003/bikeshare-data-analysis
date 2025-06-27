@@ -1,6 +1,8 @@
 import pandas as pd
 import streamlit as st
+st.set_page_config(page_title="US Bikeshare", page_icon="🚴", layout="wide")
 st.markdown(
+
     """
     <style>
     body {
@@ -24,7 +26,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 # App page configuration
-st.set_page_config(page_title="US Bikeshare", page_icon="🚴", layout="wide")
+
 
 # Main title formatting
 st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🚴‍♂ US Bikeshare Data Explorer</h1>", unsafe_allow_html=True)
