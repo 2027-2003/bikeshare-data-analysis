@@ -8,26 +8,26 @@ CITY_DATA = {
 }
 
 def get_filters():
-    print('\nمرحبًا بك في مشروع تحليل بيانات الدراجة! 🚴')
+    print('\nWelcome to the Bike Data Analysis Project! 🚴')
     while True:
-        city = input('اختر مدينة (chicago / new york / washington): ').lower()
+        city = input('Choose a city (chicago / new york / washington): ').lower()
         if city in CITY_DATA:
             break
-        print('❌ اسم المدينة غير صحيح.')
+        print('❌ Invalid city name.')
 
     months = ['january', 'february', 'march', 'april', 'may', 'june', 'all']
     while True:
-        month = input('اختر شهر (january - june) أو all: ').lower()
+        month = input('Choose a month (january - june) or all: ').lower()
         if month in months:
             break
-        print('❌ اسم الشهر غير صحيح.')
+        print('❌ Invalid month name.')
 
     days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'all']
     while True:
-        day = input('اختر يوم من الأسبوع أو all: ').lower()
+        day = input('Choose a day of the week or all: ').lower()
         if day in days:
             break
-        print('❌ اسم اليوم غير صحيح.')
+        print('❌ Invalid day name.')
 
     return city, month, day
 
@@ -47,60 +47,60 @@ def load_data(city, month, day):
     return df
 
 def time_stats(df):
-    print('\n📊 إحصائيات الوقت:')
+    print('\n📊 Time Statistics:')
     print(tabulate([
-        ['أكثر الشهور استخدامًا', df['month'].mode()[0].title()],
-        ['أكثر الأيام استخدامًا', df['day_of_week'].mode()[0].title()],
-        ['أكثر الساعات استخدامًا', df['hour'].mode()[0]]
-    ], headers=['البند', 'القيمة'], tablefmt='grid'))
+        ['Most common month', df['month'].mode()[0].title()],
+        ['Most common day', df['day_of_week'].mode()[0].title()],
+        ['Most common hour', df['hour'].mode()[0]]
+    ], headers=['Item', 'Value'], tablefmt='grid'))
 
 def station_stats(df):
-    print('\n📍 إحصائيات المحطات:')
+    print('\n📍 Station Statistics:')
     common_trip = df['Start Station'] + " → " + df['End Station']
     print(tabulate([
-        ['أكثر محطة انطلاق', df['Start Station'].mode()[0]],
-        ['أكثر محطة وصول', df['End Station'].mode()[0]],
-        ['أشهر رحلة', common_trip.mode()[0]]
-    ], headers=['البند', 'القيمة'], tablefmt='grid'))
+        ['Most common start station', df['Start Station'].mode()[0]],
+        ['Most common end station', df['End Station'].mode()[0]],
+        ['Most common trip', common_trip.mode()[0]]
+    ], headers=['Item', 'Value'], tablefmt='grid'))
 
 def trip_duration_stats(df):
-    print('\n⏱ إحصائيات مدة الرحلة:')
+    print('\n⏱ Trip Duration Statistics:')
     print(tabulate([
-        ['المدة الإجمالية (ثواني)', df['Trip Duration'].sum()],
-        ['متوسط المدة (ثواني)', round(df['Trip Duration'].mean(), 2)]
-    ], headers=['البند', 'القيمة'], tablefmt='grid'))
+        ['Total duration (seconds)', df['Trip Duration'].sum()],
+        ['Average duration (seconds)', round(df['Trip Duration'].mean(), 2)]
+    ], headers=['Item', 'Value'], tablefmt='grid'))
 
 def user_stats(df):
-    print('\n🧑‍💼 إحصائيات المستخدمين:')
+    print('\n🧑‍💼 User Statistics:')
     rows = []
 
-    # نوع المستخدم
+    # User Type
     user_types = df['User Type'].value_counts()
     for user_type, count in user_types.items():
-        rows.append([f'عدد {user_type}', count])
+        rows.append([f'Number of {user_type}', count])
 
-    # الجنس
+    # Gender
     if 'Gender' in df.columns:
         gender_counts = df['Gender'].value_counts()
         for gender, count in gender_counts.items():
-            rows.append([f'عدد {gender}', count])
+            rows.append([f'Number of {gender}', count])
     else:
-        rows.append(['الجنس', 'غير متوفر'])
+        rows.append(['Gender', 'Not available'])
 
-    # سنة الميلاد
+    # Birth Year
     if 'Birth Year' in df.columns:
-        rows.append(['أقدم سنة ميلاد', int(df['Birth Year'].min())])
-        rows.append(['أحدث سنة ميلاد', int(df['Birth Year'].max())])
-        rows.append(['أكثر سنة ميلاد شيوعًا', int(df['Birth Year'].mode()[0])])
+        rows.append(['Earliest birth year', int(df['Birth Year'].min())])
+        rows.append(['Most recent birth year', int(df['Birth Year'].max())])
+        rows.append(['Most common birth year', int(df['Birth Year'].mode()[0])])
     else:
-        rows.append(['سنة الميلاد', 'غير متوفرة'])
+        rows.append(['Birth year', 'Not available'])
 
-    print(tabulate(rows, headers=['البند', 'القيمة'], tablefmt='grid'))
+    print(tabulate(rows, headers=['Item', 'Value'], tablefmt='grid'))
 
 def display_raw_data(df):
     i = 0
     while True:
-        raw = input('\nهل تريد عرض 5 صفوف من البيانات الخام؟ (yes/no): ').lower()
+        raw = input('\nWould you like to view 5 rows of raw data? (yes/no): ').lower()
         if raw == 'yes':
             print(df.iloc[i:i+5])
             i += 5
@@ -118,74 +118,74 @@ def main():
         user_stats(df)
         display_raw_data(df)
 
-        restart = input('\nهل تريد إعادة التشغيل؟ (yes/no): ').lower()
+        restart = input('\nWould you like to restart? (yes/no): ').lower()
         if restart != 'yes':
-            print('شكراً لك 🌟')
+            print('Thank you 🌟')
             break
-            # واجهة التطبيق
+            # App Interface
             st.title("🚴‍♀ US Bikeshare Data Explorer")
-            st.markdown("تحليل بيانات الدراجات في الولايات المتحدة بطريقة تفاعلية.")
+            st.markdown("Analyze bikeshare data in the US interactively.")
 
-            # اختيارات المستخدم
-            city = st.selectbox("اختر مدينة:", list(CITY_DATA.keys()))
-            month = st.selectbox("اختر شهر:", ['All', 'January', 'February', 'March', 'April', 'May', 'June'])
-            day = st.selectbox("اختر يوم من الأسبوع:",
+            # User selections
+            city = st.selectbox("Choose a city:", list(CITY_DATA.keys()))
+            month = st.selectbox("Choose a month:", ['All', 'January', 'February', 'March', 'April', 'May', 'June'])
+            day = st.selectbox("Choose a day of the week:",
                                ['All', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
 
-            # تحميل وتصفية البيانات
+            # Load and filter data
             df = load_data(city)
             if month != 'All':
                 df = df[df['month'] == month.lower()]
             if day != 'All':
                 df = df[df['day_of_week'] == day.lower()]
 
-            # إحصائيات الأوقات
-            st.header("📅 إحصائيات الوقت")
-            st.write(f"*الشهر الأكثر شيوعًا:* {df['month'].mode()[0].title()}")
-            st.write(f"*اليوم الأكثر شيوعًا:* {df['day_of_week'].mode()[0].title()}")
-            st.write(f"*الساعة الأكثر شيوعًا:* {df['hour'].mode()[0]}")
+            # Time stats
+            st.header("📅 Time Statistics")
+            st.write(f"Most common month: {df['month'].mode()[0].title()}")
+            st.write(f"Most common day: {df['day_of_week'].mode()[0].title()}")
+            st.write(f"Most common hour: {df['hour'].mode()[0]}")
 
-            # رسم بياني للساعة
-            st.subheader("⏰ توزيع الرحلات حسب الساعة")
+            # Hour distribution plot
+            st.subheader("⏰ Trip count by hour")
             fig, ax = plt.subplots()
             df['hour'].value_counts().sort_index().plot(kind='bar', ax=ax)
-            ax.set_xlabel("الساعة")
-            ax.set_ylabel("عدد الرحلات")
+            ax.set_xlabel("Hour")
+            ax.set_ylabel("Number of trips")
             st.pyplot(fig)
 
-            # إحصائيات المحطات
-            st.header("🚏 إحصائيات المحطات")
-            st.write(f"*أكثر محطة بداية:* {df['Start Station'].mode()[0]}")
-            st.write(f"*أكثر محطة نهاية:* {df['End Station'].mode()[0]}")
+            # Station stats
+            st.header("🚏 Station Statistics")
+            st.write(f"Most common start station: {df['Start Station'].mode()[0]}")
+            st.write(f"Most common end station: {df['End Station'].mode()[0]}")
             df['Trip'] = df['Start Station'] + " → " + df['End Station']
-            st.write(f"*الرحلة الأكثر شيوعًا:* {df['Trip'].mode()[0]}")
+            st.write(f"Most common trip: {df['Trip'].mode()[0]}")
 
-            # إحصائيات مدة الرحلة
-            st.header("⏳ مدة الرحلة")
-            st.write(f"*المدة الإجمالية (ثانية):* {df['Trip Duration'].sum():,.0f}")
-            st.write(f"*متوسط المدة (ثانية):* {df['Trip Duration'].mean():.2f}")
+            # Trip duration stats
+            st.header("⏳ Trip Duration")
+            st.write(f"Total duration (seconds): {df['Trip Duration'].sum():,.0f}")
+            st.write(f"Average duration (seconds): {df['Trip Duration'].mean():.2f}")
 
-            # إحصائيات المستخدم
-            st.header("👤 إحصائيات المستخدم")
-            st.write("*أنواع المستخدمين:*")
+            # User stats
+            st.header("👤 User Statistics")
+            st.write("User Types:")
             st.dataframe(df['User Type'].value_counts())
 
             if 'Gender' in df.columns:
-                st.write("*الجنس:*")
+                st.write("Gender:")
                 st.dataframe(df['Gender'].value_counts())
             else:
-                st.warning("🚫 بيانات الجنس غير متوفرة في هذا الملف.")
+                st.warning("🚫 Gender data is not available in this file.")
 
             if 'Birth Year' in df.columns:
-                st.write(f"*أقدم سنة ميلاد:* {int(df['Birth Year'].min())}")
-                st.write(f"*أحدث سنة ميلاد:* {int(df['Birth Year'].max())}")
-                st.write(f"*أكثر سنة ميلاد شيوعًا:* {int(df['Birth Year'].mode()[0])}")
+                st.write(f"Earliest birth year: {int(df['Birth Year'].min())}")
+                st.write(f"Most recent birth year: {int(df['Birth Year'].max())}")
+                st.write(f"Most common birth year: {int(df['Birth Year'].mode()[0])}")
             else:
-                st.warning("🚫 بيانات سنة الميلاد غير متوفرة في هذا الملف.")
+                st.warning("🚫 Birth year data is not available in this file.")
 
-            # عرض البيانات الخام
-            if st.checkbox("📄 عرض أول 5 صفوف من البيانات الخام"):
+            # Show raw data
+            if st.checkbox("📄 Show first 5 rows of raw data"):
                 st.dataframe(df.head())
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     main()
